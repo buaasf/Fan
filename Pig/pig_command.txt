@@ -1,0 +1,24 @@
+///////////////////////////////////////////////////////////////////////////////////
+
+REGISTER /opt/cloudera/parcels/CDH-5.0.0-1.cdh5.0.0.p0.47/lib/pig/piggybank.jar
+REGISTER /opt/cloudera/parcels/CDH-5.0.0-1.cdh5.0.0.p0.47/lib/pig/lib/avro.jar
+REGISTER /opt/cloudera/parcels/CDH-5.0.0-1.cdh5.0.0.p0.47/lib/pig/lib/json-simple-1.1.jar
+REGISTER /opt/cloudera/parcels/CDH-5.0.0-1.cdh5.0.0.p0.47/lib/pig/lib/jackson-core-asl-1.8.8.jar
+REGISTER /opt/cloudera/parcels/CDH-5.0.0-1.cdh5.0.0.p0.47/lib/pig/lib/jackson-mapper-asl-1.8.8.jar
+
+records = LOAD '/flume/attribution-server/ATTRIBUTION/d=2014-05-20/*/*' USING org.apache.pig.piggybank.storage.avro.AvroStorage('no_schema_check','schema_file', '/flume/.meta/TrackingObject.20140429.avsc');
+
+filter_records = FILTER records BY (app_id == '35be6d72-b595-4175-9bab-3cd9746f26c0') AND (network_id is null) AND ( (ios_ifa =='181090acb296fe31')OR (android_id == '181090acb296fe31')OR (open_udid == '181090acb296fe31'));
+
+B = GROUP filter_records ALL;
+C = FOREACH B GENERATE COUNT(filter_records);
+DUMP C;
+
+2014-05-23 15:24:40,809 [main] INFO  org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.MapReduceLauncher - Success!
+2014-05-23 15:24:40,809 [main] INFO  org.apache.hadoop.conf.Configuration.deprecation - fs.default.name is deprecated. Instead, use fs.defaultFS
+2014-05-23 15:24:40,810 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
+2014-05-23 15:24:40,815 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2014-05-23 15:24:40,815 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
+(38)
+
+///////////////////////////////////////////////////////

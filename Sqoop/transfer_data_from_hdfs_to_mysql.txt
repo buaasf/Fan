@@ -1,0 +1,30 @@
+///////////////////////////////////
+enter mysql
+mysql -u deepforest -p -h ltv.ce76xbmmmwh6.us-east-1.rds.amazonaws.com
+password:deepfission
+
+mysql -u analytics -p -h ltv.ce76xbmmmwh6.us-east-1.rds.amazonaws.com
+Ana1ytics
+/////////////////////////////////
+enter database;
+use data_warehouse;
+
+show databases;
+show tables;
+
+select * from table_name;
+describe table_name;
+
+CREATE TABLE z_test LIKE fact_user_retention;
+describe z_test;
+INSERT z_test SELECT * FROM fact_user_retention;
+
+delete operation
+delete from z_test where site_id = "NULL";
+
+delete column
+alter table z_test drop column user_id_type;
+
+//////////////////////////////////////////
+sqoop export --connect jdbc:mysql://ltv.ce76xbmmmwh6.us-east-1.rds.amazonaws.com/data_warehouse --username deepforest --password deepfission --table z_test --export-dir /tmp/ltv/d=2014-05-20  --input-fields-terminated-by '\t'
+///////////////////////////////////////////////

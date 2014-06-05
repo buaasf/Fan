@@ -1,0 +1,30 @@
+///////////////////////////////
+1)Is there a record that device_id is NULL : YES, all of android_id, ios_ifa, open_udid are NULL
+
+SELECT * FROM attribution WHERE android_id IS NULL AND ios_ifa IS NULL AND open_udid IS NULL AND (d='2014-04-02');
+///////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+2) some users do not have a network_id, because they are organic : YES
+
+SELECT * FROM attribution WHERE network_id IS NULL AND d='2014-03-28' LIMIT 20;
+Time taken: 35.599 seconds, Fetched: 20 row(s)
+//////////////////////////////////////
+
+/////////////////////////////////////////////////////////
+3) if there is no network_id then there is no site_id : YES
+
+SELECT * FROM attribution WHERE network_id IS NULL AND site_id IS NOT NULL AND d='2014-03-28' LIMIT 20; (go throw all the data from 2014-03-28 to 2014-05-28)
+////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////
+4) sometimes there is a network_id but no site_id : YES
+
+SELECT * FROM attribution WHERE network_id IS NOT NULL AND site_id IS NULL AND (d='2014-04-02');
+/////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////
+5) if there is a network_id and/or site_id, they will appear in the install event record, and only in that event record : NO
+
+SELECT * FROM attribution WHERE  event_annotation IS NULL AND (network_id IS NOT NULL OR site_id IS NOT NULL) AND (d='2014-04-02') LIMIT 20;
+////////////////////////////////////////////////////////////////////////////////////////////
